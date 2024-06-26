@@ -53,3 +53,20 @@ def generate_tiny_world(n_nodes: int, width: int, height: int) -> Layout:
     return {ix: (xs[ix], ys[ix]) for ix in range(n_nodes)}
 
 
+if __name__ == "__main__":
+    
+    config = DEFAULT_CONFIG
+    config.M_max = 5
+    config.M_max0 = 10
+    config.M = 5
+    config.m_L = (1. / math.log(5))
+
+    total = 30
+    layout = generate_tiny_world(total, 100, 100)
+    vectors = numpy.array([layout[ix] for ix in range(total)])
+    index = HNSWIndex(d=2, config=config)
+    index.add(vectors)
+
+    visualize_hnsw_index(index, layout)
+
+
