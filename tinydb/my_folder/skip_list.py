@@ -63,7 +63,7 @@ class Node:
                 new_node.pointers[i] = node.pointers[i]
                 node.pointers[i] = new_node
     def find(self, value: int) -> Node | None:
-            current = self.header
+        current = self.header
         level = self.level
 
         while level >= 0 and current.pointers[0] is not None:
@@ -80,3 +80,36 @@ class Node:
                 current = current.pointers[level]
 
         return None
+    def delete(self, value: int) -> None:
+        update = [None for _ in range(self.max_level + 1)]
+        current = self.header
+
+        # Traverse the skip-list and make a list of all the nodes that need to be updated
+        for level in range(self.level, -1, -1):
+            while (
+                current.pointers[level] is not None
+                and current.pointers[level].value < value
+            ):
+                current = current.pointers[level]
+            update[level] = current
+
+    if current.pointers[0] is not None and current.pointers[0].value == value:
+            for level in range(self.level + 1):
+                if (
+                    update[level].pointers[level] is not None
+                    and update[level].pointers[level].value == value
+                ):
+                    update[level].pointers[level] = (
+                        update[level].pointers[level].pointers[level]
+                    )
+
+            # Remove levels that have no nodes
+            while self.level > 0 and self.header.pointers[self.level] is None:
+                self.level -= 1
+    def tolist(self, level: int = 0) -> list[int]:
+            output = []
+        current = self.header
+        while current.pointers[level] is not None:
+            current = current.pointers[level]
+            output.append(current.value)
+        return output
