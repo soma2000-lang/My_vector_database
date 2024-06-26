@@ -7,3 +7,6 @@ import numpy
 import random
 import networkx
 import matplotlib.pyplot as plt
+
+
+Layout = Dict[int, Tuple[float, float]]
