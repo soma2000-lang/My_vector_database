@@ -56,3 +56,5 @@ def cosine_distance(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
 
     return inner_product_distance(X, Y)
 
+def l2_distance(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
+    return numpy.linalg.norm(X - Y, axis=1)
