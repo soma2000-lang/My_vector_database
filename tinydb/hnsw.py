@@ -73,3 +73,19 @@ class HNSWIndex(Index):
             W = list(zip(*self.layers[0].search(q, ep, ef)))
             neighbors = nsmallest(k, W, lambda x: x[0])
             return list(zip(*neighbors))
+        class HNSWLayer:
+            def __init__(self, index: HNSWIndex, lc: int, ep: int | None = None) -> None:
+                self.G = networkx.Graph()
+                self.index = index
+                self.config = self.index.config
+
+                if ep is not None:
+                    self.G.add_node(ep)
+
+                if lc == 0:
+                    self.M_max = self.config.M_max0
+                else:
+                    self.M_max = self.config.M_max
+
+                if self.config.neighbors == "simple":
+                    self.f_neighbors = self.select_neighbors
