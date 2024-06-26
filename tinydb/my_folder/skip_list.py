@@ -34,3 +34,19 @@ class Node:
         while random.random() < self.p and level < self.max_level:
             level += 1
         return level
+    def insert(self, value: int) -> None:
+            # list of all nodes that might need to update their forward pointer
+        update = [self.header for _ in range(self.max_level + 1)]
+        # step 1 is to traverse the skip-list and make a list of all the
+        # nodes that need to be updated
+        current = self.header
+
+        for level in range(self.level, -1, -1):
+            while (
+                current.pointers[level] is not None
+                and current.pointers[level].value < value
+            ):
+                current = current.pointers[level]
+            update[level] = current
+
+        current = current.pointers[0]
