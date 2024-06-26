@@ -161,3 +161,22 @@ class HNSWIndex(Index):
                     # ensure we don't clobber the pointer
                     h = list(zip(D, W))
                     heapify(h)
+                    R = []
+                    W_d = []
+                   
+
+                    while len(h) > 0 and len(R) < M:
+                        d_e, e = heappop(h)
+
+                        if len(R) == 0 or (
+                            d_e
+                            < min([self.distance_to_node(self.index.vectors[e], n) for _, n in R])
+                        ):
+                            R.append((d_e, e))
+                        else:
+                            W_d.append((d_e, e))
+                    if self.config.keep_pruned_connections and len(R) < M:
+                        R.extend(nsmallest(M - len(R), W_d, key=lambda x: x[0]))
+
+                    return nsmallest(M, R, key=lambda x: x[0])
+
