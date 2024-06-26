@@ -42,3 +42,10 @@ class FilterableHNSWLayer(HNSWLayer):
         C = [(ep_dist, ep)]
         # this addresses the issue of not considering the ep if it's not a valid node:
         W = [] if (valid and ep not in valid_set) else [(ep_dist, ep)]
+        while len(C) > 0:
+            d_c, c = heappop(C)
+            if len(W) > 0:
+                d_f, f = nlargest(1, W, key=lambda x: x[0])[0]
+
+                if d_c > d_f:
+                    break
