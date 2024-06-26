@@ -55,4 +55,12 @@ class HNSWIndex(Index):
                 self.layers.append(self.layer_factory(l_new, self.ix))
                 self.L = l
                 self.ep = ix
+        def distance(self, q: numpy.ndarray, v: numpy.ndarray) -> numpy.ndarray:
+            if len(q.shape) == 1:
+            q = numpy.expand_dims(q, axis=0)
+
+        if len(v.shape) == 1:
+            v = numpy.expand_dims(v, axis=0)
+
+        return self.f_distance(q, v)
 
