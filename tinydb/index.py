@@ -36,3 +36,10 @@ class Index:
     def save(self, file: str) -> None:
         with open(file, "wb") as f:
             pickle.dump(self, f)
+        @classmethod
+        def from_file(cls, file: str) -> Index:
+            with open(file, "rb") as f:
+                return pickle.load(f)
+def _normalize(X: numpy.ndarray) -> numpy.ndarray:
+    return X / numpy.expand_dims(numpy.linalg.norm(X, axis=1), axis=1)
+
