@@ -49,3 +49,27 @@ class FilterableHNSWLayer(HNSWLayer):
 
                 if d_c > d_f:
                     break
+            for e in self.G[c]:
+                if e in v:
+                    continue
+
+                v.add(e)
+                if len(W) > 0:
+                    d_f, f = nlargest(1, W, key=lambda x: x[0])[0]
+                d_e = self.distance_to_node(q, e)
+
+                if len(W) == 0 or d_e < d_f or len(W) < ef:
+                    heappush(C, (d_e, e))
+                    if valid is None or e in valid_set:
+                        heappush(W, (d_e, e))
+                        if len(W) > ef:
+                            W = nsmallest(ef, W, key=lambda x: x[0])
+if __name__ == "__main__":
+    random.seed(100)
+
+    index = FilterableHNSWIndex(2)
+    vectors = numpy.random.randn(10, 2)
+    index.add(vectors)
+
+    for ix, v in enumerate(vectors):
+        print(ix, index.search(v, 1, valid=[x for x in range(10) if x != ix]))
