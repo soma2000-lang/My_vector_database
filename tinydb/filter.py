@@ -27,3 +27,13 @@ class FilterableHNSWIndex(HNSWIndex):
             ep = self.layers[lc].search(q, ep, 1)[1][0]
 
         return self.layers[0].search(q, ep, k, valid=valid)
+    class FilterableHNSWLayer(HNSWLayer):
+        """
+    The allow-list works by ensuring that only valid neighbors are added to the
+    candidate neighbor list (W).
+    """
+    def search(
+        self, q: numpy.ndarray, ep: int, ef: int, valid: list[int] | None = None
+    ) -> tuple[list[float], list[int]]:
+        ep_dist = self.distance_to_node(q, ep)
+        valid_set = set(valid)
