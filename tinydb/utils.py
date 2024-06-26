@@ -20,3 +20,5 @@ def download_sift():
     ) as r:
         with open(output, "wb") as f:
             shutil.copyfileobj(r, f)
+    tar = tarfile.open(output, "r:gz")
+    tar.extractall("data")
