@@ -51,8 +51,8 @@ class HNSWIndex(Index):
         for layer in range(min(L, l), -1, -1):
             self.layers[layer].insert(q, ix, ep)
         if l > self.L:
-                for l_new in range(L + 1, l + 1):
-                    self.layers.append(self.layer_factory(l_new, self.ix))
+            for l_new in range(L + 1, l + 1):
+                self.layers.append(self.layer_factory(l_new, self.ix))
                 self.L = l
                 self.ep = ix
 
