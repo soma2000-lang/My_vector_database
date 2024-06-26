@@ -37,3 +37,8 @@ class FilterableHNSWLayer(HNSWLayer):
         ) -> tuple[list[float], list[int]]:
             ep_dist = self.distance_to_node(q, ep)
             valid_set = set(valid)
+            
+        v = {ep}
+        C = [(ep_dist, ep)]
+        # this addresses the issue of not considering the ep if it's not a valid node:
+        W = [] if (valid and ep not in valid_set) else [(ep_dist, ep)]
