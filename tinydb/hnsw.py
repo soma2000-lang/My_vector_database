@@ -179,4 +179,28 @@ class HNSWIndex(Index):
                         R.extend(nsmallest(M - len(R), W_d, key=lambda x: x[0]))
 
                     return nsmallest(M, R, key=lambda x: x[0])
+    if __name__ == "__main__":
+        # config = HNSWConfig(
+    #     M=3, M_max=3, M_max0=6, m_L=(1.0 / math.log(3)), ef_construction=32, ef_search=32
+    # )
+    # index = HNSWIndex(2, config=config)
+    # vectors = numpy.random.randn(10, 2)
+    # index.add(vectors)
+
+    # for ix, v in enumerate(vectors):
+    #     print(ix, index.search(v, 1))
+
+    # visualize_hnsw_index(index)
+
+    data, queries, labels = load_sift()
+
+    index = HNSWIndex(128, distance="l2", config=DEFAULT_CONFIG)
+    index.add(data)
+
+    I = []
+    for q in queries:
+        D_q, I_q = index.search(q, k=1)
+        I.append(I_q[0])
+
+    print(f"Recall@1: {evaluate(labels, I)}")
 
