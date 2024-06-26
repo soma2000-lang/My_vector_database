@@ -22,7 +22,7 @@ def download_sift():
             shutil.copyfileobj(r, f)
     tar = tarfile.open(output, "r:gz")
     tar.extractall("data")
-    
+
 def read_vecs(path: str, ivecs: bool = False) -> numpy.ndarray:
     a = numpy.fromfile(path, dtype="int32")
     d = a[0]
@@ -32,3 +32,10 @@ def read_vecs(path: str, ivecs: bool = False) -> numpy.ndarray:
         matrix = matrix.view("float32")
 
     return matrix
+def evaluate(gold: numpy.ndarray, predictions: numpy.ndarray) -> float:
+    """
+    Compute Recall@1;
+        - gold: array of shape (k,) -- integers
+        - predictions: array of shape (k,) -- integers
+    """
+    return sum(gold==predictions)
