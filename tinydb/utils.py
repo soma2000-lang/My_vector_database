@@ -22,6 +22,7 @@ def download_sift():
             shutil.copyfileobj(r, f)
     tar = tarfile.open(output, "r:gz")
     tar.extractall("data")
+    
 def read_vecs(path: str, ivecs: bool = False) -> numpy.ndarray:
     a = numpy.fromfile(path, dtype="int32")
     d = a[0]
