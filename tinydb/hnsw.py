@@ -134,10 +134,17 @@ class HNSWIndex(Index):
                 neighbors = self.f_neighbors(D, W, self.config.M)
                 self.G.add_edges_from([(e, node, {"distance": float(d)}) for d, e in neighbors])
 
-        for d, e in neighbors:
-            if len(self.G[e]) > self.M_max:
-                D, W = list(zip(*[(self.G[e][n]["distance"], n) for n in self.G[e]]))
-                new_conn = self.f_neighbors(D, W, self.M_max)
-                self.G.remove_edges_from([(e, e_n) for e_n in self.G[e]])
-                self.G.add_edges_from(
-                    [(e, e_n, {"distance": d_n}) for d_n, e_n in new_conn]
+                for d, e in neighbors:
+                    if len(self.G[e]) > self.M_max:
+                        D, W = list(zip(*[(self.G[e][n]["distance"], n) for n in self.G[e]]))
+                        new_conn = self.f_neighbors(D, W, self.M_max)
+                        self.G.remove_edges_from([(e, e_n) for e_n in self.G[e]])
+                        self.G.add_edges_from(
+                            [(e, e_n, {"distance": d_n}) for d_n, e_n in new_conn]
+                def select_neighbors(
+                    self, D: list[float], W: list[int], M: int
+                ) -> list[tuple[float, int]]:
+                    """
+                    Uses the "simple" way to select neighbors.
+                    """
+                    return nsmallest(M, zip(D, W), key=lambda x: x[0])
