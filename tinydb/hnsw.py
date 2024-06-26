@@ -65,3 +65,11 @@ class HNSWIndex(Index):
         return self.f_distance(q, v)
     
         def search(self, q: numpy.ndarray, k: int) -> tuple[numpy.ndarray, numpy.ndarray]:
+            ep = self.ep
+            ef = max(k, self.config.ef_search)
+            for lc in range(self.L, 0, -1):
+                ep = self.layers[lc].search(q, ep, 1)[1][0]
+
+            W = list(zip(*self.layers[0].search(q, ep, ef)))
+            neighbors = nsmallest(k, W, lambda x: x[0])
+            return list(zip(*neighbors))
