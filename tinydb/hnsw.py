@@ -148,3 +148,16 @@ class HNSWIndex(Index):
                     Uses the "simple" way to select neighbors.
                     """
                     return nsmallest(M, zip(D, W), key=lambda x: x[0])
+                    
+                 def select_neighbors_heuristic(
+                    self, D: list[float], W: list[int], M: int
+                ) -> list[tuple[float, int]]:
+                    """
+                    The "heuristic" method of selecting neighbors, which works
+                    better for clustered data.
+                    """
+                    R = []
+                    W_d = []
+                    # ensure we don't clobber the pointer
+                    h = list(zip(D, W))
+                    heapify(h)
