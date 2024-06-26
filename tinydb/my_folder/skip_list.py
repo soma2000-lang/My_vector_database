@@ -113,3 +113,13 @@ class Node:
             current = current.pointers[level]
             output.append(current.value)
         return output
+    def __repr__(self) -> str:
+            output = ""
+        # we're going to use this to get the spacing correct
+        list = self.tolist()
+
+        for level in range(self.level, -1, -1):
+            current = self.header
+            values = []
+            ix = -1
+
