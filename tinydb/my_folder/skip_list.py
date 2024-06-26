@@ -107,7 +107,7 @@ class Node:
             while self.level > 0 and self.header.pointers[self.level] is None:
                 self.level -= 1
     def tolist(self, level: int = 0) -> list[int]:
-            output = []
+        output = []
         current = self.header
         while current.pointers[level] is not None:
             current = current.pointers[level]
