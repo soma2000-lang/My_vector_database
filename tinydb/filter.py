@@ -33,7 +33,7 @@ class FilterableHNSWIndex(HNSWIndex):
     candidate neighbor list (W).
     """
     def search(
-        self, q: numpy.ndarray, ep: int, ef: int, valid: list[int] | None = None
-    ) -> tuple[list[float], list[int]]:
-        ep_dist = self.distance_to_node(q, ep)
-        valid_set = set(valid)
+            self, q: numpy.ndarray, ep: int, ef: int, valid: list[int] | None = None
+        ) -> tuple[list[float], list[int]]:
+            ep_dist = self.distance_to_node(q, ep)
+            valid_set = set(valid)
