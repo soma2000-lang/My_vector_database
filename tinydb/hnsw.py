@@ -47,12 +47,12 @@ class HNSWIndex(Index):
         
         for layer in range(L):
             _,W= self.layers[layer].search(q, ep, ef=1)
-             ep = W[0]
+            ep = W[0]
         for layer in range(min(L, l), -1, -1):
             self.layers[layer].insert(q, ix, ep)
         if l > self.L:
                 for l_new in range(L + 1, l + 1):
-                self.layers.append(self.layer_factory(l_new, self.ix))
-            self.L = l
-            self.ep = ix
+                    self.layers.append(self.layer_factory(l_new, self.ix))
+                self.L = l
+                self.ep = ix
 
