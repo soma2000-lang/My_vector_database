@@ -24,3 +24,21 @@ l   layout = layout or networkx.spring_layout(index.layers[0].G)
     all_y_values = [pos[1] for pos in layout.values()]
     min_x, max_x = min(all_x_values), max(all_x_values)
     min_y, max_y = min(all_y_values), max(all_y_values)
+    
+    for i, layer in enumerate(index.layers):
+        graph = layer.G
+
+        graph_layout = {k: v for k, v in layout.items() if k in graph}
+        graph_node_color = [node_color[k] for k, _ in graph_layout.items()]
+        networkx.draw(
+            graph, graph_layout, ax=axs[i], node_size=25, node_color=graph_node_color
+        )
+        axs[i].set_title(f"Layer {i}")
+        # Set consistent axes limits
+        axs[i].set_xlim(min_x-1, max_x+1)
+        axs[i].set_ylim(min_y-1, max_y+1)
+
+    plt.show()
+
+
+
