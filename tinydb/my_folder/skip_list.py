@@ -25,3 +25,12 @@ class Node:
 
         for value in lst:
             self.insert(value)
+    def _random_level(self) -> int:
+            """
+        Coin-flipping implementation for sampling -- we could make this more
+        efficient using the alias method.
+        """
+        level = 0
+        while random.random() < self.p and level < self.max_level:
+            level += 1
+        return level
