@@ -39,3 +39,16 @@ def evaluate(gold: numpy.ndarray, predictions: numpy.ndarray) -> float:
         - predictions: array of shape (k,) -- integers
     """
     return sum(gold==predictions)
+
+def load_sift() -> tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
+    if not os.path.exists(DATA_PATH):
+        download_sift()
+
+    return (
+        read_vecs(DATA_PATH),
+        read_vecs(QUERY_PATH),
+        read_vecs(LABEL_PATH, ivecs=True)[:, 0],
+    )
+
+if __name__ == '__main__':
+    load_sift()
