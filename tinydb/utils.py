@@ -18,3 +18,5 @@ def download_sift():
     with closing(
         request.urlopen("ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz")
     ) as r:
+        with open(output, "wb") as f:
+            shutil.copyfileobj(r, f)
