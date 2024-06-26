@@ -89,3 +89,5 @@ class HNSWIndex(Index):
 
                 if self.config.neighbors == "simple":
                     self.f_neighbors = self.select_neighbors
+                else:
+                    self.f_neighbors = self.select_neighbors_heuristic
