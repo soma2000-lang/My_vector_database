@@ -43,3 +43,9 @@ class Index:
 def _normalize(X: numpy.ndarray) -> numpy.ndarray:
     return X / numpy.expand_dims(numpy.linalg.norm(X, axis=1), axis=1)
 
+def cosine_similarity(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
+    X = _normalize(X)
+    Y = _normalize(Y)
+
+    return numpy.dot(X, Y.T)
+
