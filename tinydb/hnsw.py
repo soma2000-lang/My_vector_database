@@ -180,7 +180,7 @@ class HNSWIndex(Index):
 
                     return nsmallest(M, R, key=lambda x: x[0])
     if __name__ == "__main__":
-        
+
 
     data, queries, labels = load_sift()
 
