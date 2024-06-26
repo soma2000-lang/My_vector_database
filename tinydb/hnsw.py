@@ -63,4 +63,5 @@ class HNSWIndex(Index):
             v = numpy.expand_dims(v, axis=0)
 
         return self.f_distance(q, v)
-
+    
+        def search(self, q: numpy.ndarray, k: int) -> tuple[numpy.ndarray, numpy.ndarray]:
