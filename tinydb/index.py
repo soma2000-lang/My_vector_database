@@ -48,4 +48,11 @@ def cosine_similarity(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
     Y = _normalize(Y)
 
     return numpy.dot(X, Y.T)
+def inner_product_distance(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
+    return 1.0 - numpy.dot(X, Y.T)
+def cosine_distance(X: numpy.ndarray, Y: numpy.ndarray) -> numpy.ndarray:
+    X = _normalize(X)
+    Y = _normalize(Y)
+
+    return inner_product_distance(X, Y)
 
