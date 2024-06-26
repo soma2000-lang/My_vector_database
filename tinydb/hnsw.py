@@ -122,3 +122,22 @@ class HNSWIndex(Index):
                                 W = nsmallest(ef, W, key=lambda x: x[0])
 
                 return tuple(zip(*W))
+            def insert(self, q: numpy.ndarray, node: int, ep: int) -> None:
+                if node in self.G:
+                    return
+
+                if len(self.G) == 0:
+                    self.G.add_node(node)
+                    return
+
+                D, W = self.search(q, ep, self.config.ef_construction)
+                neighbors = self.f_neighbors(D, W, self.config.M)
+                self.G.add_edges_from([(e, node, {"distance": float(d)}) for d, e in neighbors])
+
+        for d, e in neighbors:
+            if len(self.G[e]) > self.M_max:
+                D, W = list(zip(*[(self.G[e][n]["distance"], n) for n in self.G[e]]))
+                new_conn = self.f_neighbors(D, W, self.M_max)
+                self.G.remove_edges_from([(e, e_n) for e_n in self.G[e]])
+                self.G.add_edges_from(
+                    [(e, e_n, {"distance": d_n}) for d_n, e_n in new_conn]
