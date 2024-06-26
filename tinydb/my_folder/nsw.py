@@ -1,4 +1,4 @@
 import numpy as np
 
-from tinyhnsw.utils import evaluate, load_sift
-from tinyhnsw.knn import cosine_similarity
+from tinydb.utils import evaluate, load_sift
+from tinydb.knn import cosine_similarity
