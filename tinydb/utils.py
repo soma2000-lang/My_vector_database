@@ -2,7 +2,7 @@
 name = "tinydb"
 version = "0.1.0"
 description = ""
-authors = ["Somasree Majumder <bishnupadamajumder32@gmail.com@gmail.com>"]
+authors = ["Somasree Majumder <bishnupadamajumder32@gmail"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
