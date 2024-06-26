@@ -42,3 +42,14 @@ l   layout = layout or networkx.spring_layout(index.layers[0].G)
 
 
 
+def generate_tiny_world(n_nodes: int, width: int, height: int) -> Layout:
+    """
+    'tiny world' is a set of 2d points (snapped to an integer grid) that we're
+    going to use to visualize HNSW in 2 dimensions.
+    """
+    xs = [random.randint(0, width - 1) for _ in range(n_nodes)]
+    ys = [random.randint(0, height - 1) for _ in range(n_nodes)]
+
+    return {ix: (xs[ix], ys[ix]) for ix in range(n_nodes)}
+
+
