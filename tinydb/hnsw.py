@@ -95,30 +95,30 @@ class HNSWIndex(Index):
                 self, q: numpy.ndarray, ep: int, ef: int
             ) -> tuple[list[float], list[int]]:
                 ep_dist = self.distance_to_node(q, ep)
-                 v = {ep}
-                    C = [(ep_dist, ep)]
-                    W = [(ep_dist, ep)]
+                v = {ep}
+                C = [(ep_dist, ep)]
+                W = [(ep_dist, ep)]
 
-                    while len(C) > 0:
-                        d_c, c = heappop(C)
+                while len(C) > 0:
+                    d_c, c = heappop(C)
+                    d_f, f = nlargest(1, W, key=lambda x: x[0])[0]
+
+                    if d_c > d_f:
+                        break
+
+                    for e in self.G[c]:
+                        if e in v:
+                            continue
+
+                        v.add(e)
                         d_f, f = nlargest(1, W, key=lambda x: x[0])[0]
+                        d_e = self.distance_to_node(q, e)
 
-                        if d_c > d_f:
-                            break
+                        if d_e < d_f or len(W) < ef:
+                            heappush(C, (d_e, e))
+                            heappush(W, (d_e, e))
 
-                        for e in self.G[c]:
-                            if e in v:
-                                continue
+                            if len(W) > ef:
+                                W = nsmallest(ef, W, key=lambda x: x[0])
 
-                            v.add(e)
-                            d_f, f = nlargest(1, W, key=lambda x: x[0])[0]
-                            d_e = self.distance_to_node(q, e)
-
-                            if d_e < d_f or len(W) < ef:
-                                heappush(C, (d_e, e))
-                                heappush(W, (d_e, e))
-
-                                if len(W) > ef:
-                                    W = nsmallest(ef, W, key=lambda x: x[0])
-
-                    return tuple(zip(*W))
+                return tuple(zip(*W))
