@@ -1,3 +1,7 @@
+"""
+Simple implementation of skip-lists in python, one of the two important algorithms to
+understand to implement/understand HNSW.
+"""
 from __future__ import annotations
 
 import random
@@ -10,6 +14,14 @@ class Node:
 
     def __repr__(self) -> str:
         return str(self.value)
+
+
+class SkipList:
+    """
+    Our skip-list implementation. Note that it doesn't support duplicates (!!!), so it's more
+    of a skip-set.
+    """
+
     def __init__(
         self, lst: list[int] | None = None, max_level: int = 2, p: float = 0.5
     ) -> None:
@@ -25,8 +37,9 @@ class Node:
 
         for value in lst:
             self.insert(value)
+
     def _random_level(self) -> int:
-            """
+        """
         Coin-flipping implementation for sampling -- we could make this more
         efficient using the alias method.
         """
@@ -34,8 +47,9 @@ class Node:
         while random.random() < self.p and level < self.max_level:
             level += 1
         return level
+
     def insert(self, value: int) -> None:
-            # list of all nodes that might need to update their forward pointer
+        # list of all nodes that might need to update their forward pointer
         update = [self.header for _ in range(self.max_level + 1)]
         # step 1 is to traverse the skip-list and make a list of all the
         # nodes that need to be updated
@@ -50,6 +64,7 @@ class Node:
             update[level] = current
 
         current = current.pointers[0]
+
         if current is None or current.value != value:
             # sample the level for the current node, and...
             level = self._random_level()
@@ -62,6 +77,7 @@ class Node:
                 node = update[i]
                 new_node.pointers[i] = node.pointers[i]
                 node.pointers[i] = new_node
+
     def find(self, value: int) -> Node | None:
         current = self.header
         level = self.level
@@ -80,6 +96,7 @@ class Node:
                 current = current.pointers[level]
 
         return None
+
     def delete(self, value: int) -> None:
         update = [None for _ in range(self.max_level + 1)]
         current = self.header
@@ -93,7 +110,8 @@ class Node:
                 current = current.pointers[level]
             update[level] = current
 
-    if current.pointers[0] is not None and current.pointers[0].value == value:
+        # If the next node is the target node, update the pointers
+        if current.pointers[0] is not None and current.pointers[0].value == value:
             for level in range(self.level + 1):
                 if (
                     update[level].pointers[level] is not None
@@ -106,6 +124,11 @@ class Node:
             # Remove levels that have no nodes
             while self.level > 0 and self.header.pointers[self.level] is None:
                 self.level -= 1
+
+    """
+    Everything below here are just helper functions for testing and pretty-printing:
+    """
+
     def tolist(self, level: int = 0) -> list[int]:
         output = []
         current = self.header
@@ -113,8 +136,9 @@ class Node:
             current = current.pointers[level]
             output.append(current.value)
         return output
+
     def __repr__(self) -> str:
-            output = ""
+        output = ""
         # we're going to use this to get the spacing correct
         list = self.tolist()
 
@@ -123,3 +147,19 @@ class Node:
             values = []
             ix = -1
 
+            while current.pointers[level] is not None:
+                current = current.pointers[level]
+                spacing = [" " for _ in range(1, list.index(current.value) - ix)]
+                values.extend([*spacing, str(current)])
+                ix = list.index(current.value)
+
+            output += f"{level} | {' '.join(values)}\n"
+
+        return output
+
+
+if __name__ == "__main__":
+    values = [3, 2, 1, 7, 14, 9, 6]
+    skiplist = SkipList(values)
+    print(skiplist)
+    print(skiplist.tolist())
