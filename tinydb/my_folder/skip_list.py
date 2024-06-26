@@ -50,3 +50,33 @@ class Node:
             update[level] = current
 
         current = current.pointers[0]
+        if current is None or current.value != value:
+            # sample the level for the current node, and...
+            level = self._random_level()
+            # ...update the current level if necessary
+            self.level = max(level, self.level)
+
+            new_node = Node(value, level)
+
+            for i in range(level, -1, -1):
+                node = update[i]
+                new_node.pointers[i] = node.pointers[i]
+                node.pointers[i] = new_node
+    def find(self, value: int) -> Node | None:
+            current = self.header
+        level = self.level
+
+        while level >= 0 and current.pointers[0] is not None:
+            next = current.pointers[level]
+            # move down a level
+            if next is None or next.value > value:
+                level -= 1
+                continue
+            # closest node is current node -- return it
+            if next.value == value:
+                return next
+            # move over one pointer
+            if next.value < value:
+                current = current.pointers[level]
+
+        return None
