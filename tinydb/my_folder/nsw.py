@@ -75,3 +75,29 @@ class NSWIndex:
             result.update(temp_res)
 
         return sorted(result, key=lambda x: self.distance(query, self.data[x]))[:k]
+
+    @staticmethod
+    def distance(a, b):
+        # Adjusting the distance function for cosine similarity with single vectors
+        return 1 - cosine_similarity([a], [b])[0, 0]
+
+    def get_random_entry_point(self):
+        import random
+
+        return random.choice(list(self.graph.keys())) if self.graph else None
+    index = NSWIndex()
+
+    data, queries, labels = load_sift()
+    for i, vector in enumerate(data):
+        index.add_item(vector)
+
+print("added")
+
+idxs = []
+for vector in queries:
+    idxs.append(index.greedy_search(vector, index.get_random_entry_point()))
+
+print(idxs)
+print(labels)
+
+print(f"Recall@1: {evaluate(labels, np.array(idxs))}")
